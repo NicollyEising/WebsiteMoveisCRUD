@@ -1,9 +1,15 @@
+from bancoDeDados import Session, Usuario, Produtos, Favoritos, Carrinho, CarrinhoItem
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
-from bancoDeDados import Session, Usuario, Produtos, Favoritos, Carrinho, CarrinhoItem
-from WebsiteMoveisCRUD.schemas import *
+from schemas import *
 
+#PS C:\Users\faculdade\Desktop\ecommercePessoal\WebsiteMoveisCRUD> uvicorn api:app --reload 
 app = FastAPI()
+
+@app.get("/")
+def root():
+    return {"message": "API está funcionando"}
+
 
 app.add_middleware(
     CORSMiddleware,
