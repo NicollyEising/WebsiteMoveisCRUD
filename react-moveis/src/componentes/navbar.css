@@ -1,0 +1,114 @@
+.search-container {
+  overflow: hidden;
+  transition: max-width 0.5s ease, opacity 0.5s ease;
+  max-width: 0;
+  opacity: 0;
+}
+
+.navbar{
+    box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px!important;
+    padding-bottom: 10px!important;
+}
+
+.navbar-brand{
+    font-size: 1.5em!important;
+}
+
+.search-container.show {
+  max-width: 500px; /* ajuste conforme necessário */
+  opacity: 1;
+}
+
+button {
+  border: none !important;
+  box-shadow: none;
+}
+
+button:hover {
+  background-color: transparent !important;
+  color: black !important;
+}
+
+.bi {
+  font-size: 20px !important;
+}
+
+.bi-person{
+    background-color: white!important;
+    border: none!important;
+    box-shadow: none;
+    font-size: 1.6em!important;
+}
+
+.bi-person:hover{
+    background-color: white!important;
+    border: none!important;
+}
+
+.bi-search{
+    background-color: white!important;
+    border: none!important;
+    box-shadow: none;
+    font-size: 1.3em!important;
+}
+
+.bi-cart2{
+    background-color: white!important;
+    border: none!important;
+    box-shadow: none;
+    font-size: 1.5em!important;
+    margin: 0px 15px;
+}
+
+.bi-cart2:hover{
+    background-color: white!important;
+    border: none!important;
+}
+
+.bi-heart-fill{
+    background-color: white!important;
+    border: none!important;
+    box-shadow: none;
+    font-size: 1.3em!important;
+    margin: 5px 5px;
+}
+
+.bi-heart-fill:hover{
+    background-color: white!important;
+    border: none!important;
+}
+
+li a{
+    position: relative;
+}
+
+
+.icons{
+    display: flex!important;
+}
+
+@media screen and (max-width: 720px) {
+    .icons{
+        display: flex!important;
+        justify-content: center;
+    }
+
+    .itensPequeno{
+        justify-content: start!important;
+        align-items: start!important;
+        text-align: start!important;
+    }
+
+    .dropdown-menu {
+        width: 100% !important; /* Garante que o menu ocupe 100% da largura */
+    }
+    
+    .dropdown-item {
+        padding: 10px!important;
+        display: block; /* Faz o item ocupar toda a largura */
+        width: 100%;    /* Garante que ocupe 100% da largura disponível */
+    }
+    
+    
+    
+}

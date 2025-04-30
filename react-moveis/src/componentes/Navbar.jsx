@@ -1,0 +1,88 @@
+import React, { useState } from "react";
+import "./Navbar.css";
+import 'bootstrap-icons/font/bootstrap-icons.css';
+
+const Navbar = () => {
+  const [showSearch, setShowSearch] = useState(false);
+  const [isNavbarOpen, setIsNavbarOpen] = useState(false);
+
+  const toggleNavbar = () => {
+    setIsNavbarOpen(!isNavbarOpen);
+  };
+
+  return (
+    <nav className="navbar navbar-expand-lg fixed-top">
+      <div className="container">
+        <a className="navbar-brand" href="#">
+          Navbar
+        </a>
+        <button
+          className="navbar-toggler"
+          type="button"
+          onClick={toggleNavbar}
+          aria-controls="navbarSupportedContent"
+          aria-expanded={isNavbarOpen ? "true" : "false"}
+          aria-label="Toggle navigation"
+        >
+          <span className="navbar-toggler-icon"></span>
+        </button>
+        <div className={`collapse navbar-collapse ${isNavbarOpen ? "show" : ""}`} id="navbarSupportedContent">
+          <div className="d-flex mx-auto align-items-center itensPequeno">
+            <ul className="navbar-nav mb-2 mb-lg-0 itensPequeno">
+              <li>
+                <a className="dropdown-item px-4" href="#">
+                  Cadeiras de Escritório
+                </a>
+              </li>
+              <li>
+                <a className="dropdown-item px-4" href="#">
+                  Cadeiras Gamer
+                </a>
+              </li>
+              <li>
+                <a className="dropdown-item px-4" href="#">
+                  Cadeiras Ergonomicas
+                </a>
+              </li>
+            </ul>
+          </div>
+          <div className="icons">
+          <button
+            className="btn btn-outline-primary me-2"
+            onClick={() => setShowSearch(!showSearch)}
+          >
+            {showSearch ? <i className="bi bi-chevron-right"></i> : <i className="bi bi-search"></i>}
+          </button>
+          <div className={`search-container ${showSearch ? "show" : ""}`}>
+            <form className="d-flex" role="search">
+              <input
+                className="form-control me-2"
+                type="search"
+                placeholder="Search"
+                aria-label="Search"
+              />
+              <button className="btn btn-outline-success" type="submit">
+                <i className="bi bi-search"></i>
+              </button>
+            </form>
+          </div>
+          <a href="#" className="btnCart">
+            <button className="bi bi-person" aria-label="Person Icon"></button>
+          </a>
+          <a href="#" className="btnCart">
+            <button className="bi bi-cart2" aria-label="Person Icon"></button>
+          </a>
+          <a href="#" className="btnCart">
+            <button className="bi bi-heart-fill" aria-label="Person Icon"></button>
+          </a>
+          </div>
+          
+        </div>
+        
+      </div>
+      
+    </nav>
+  );
+};
+
+export default Navbar;
