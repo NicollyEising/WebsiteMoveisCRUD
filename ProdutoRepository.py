@@ -4,8 +4,8 @@ class ProdutoRepository:
     def __init__(self):
         self.session = Session()
 
-    def criar(self, nome, preco, detalhes):
-        produto = Produtos(produto=nome, preco=preco, detalhes=detalhes)
+    def criar(self, nome, preco, detalhes, img):
+        produto = Produtos(produto=nome, preco=preco, detalhes=detalhes, img=img)
         self.session.add(produto)
         self.session.commit()
         return produto
@@ -13,12 +13,13 @@ class ProdutoRepository:
     def listar_todos(self):
         return self.session.query(Produtos).all()
 
-    def atualizar(self, id_produto, nome, preco, detalhes):
+    def atualizar(self, id_produto, nome, preco, detalhes, img):
         produto = self.session.query(Produtos).filter_by(id=id_produto).first()
         if produto:
             produto.produto = nome
             produto.preco = preco
             produto.detalhes = detalhes
+            produto.img =  img
             self.session.commit()
         return produto
 

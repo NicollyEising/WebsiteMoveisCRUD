@@ -6,6 +6,7 @@ class ProdutoBase(BaseModel):
     produto: str
     preco: float
     detalhes: Optional[str]
+    img: str
 
 class ProdutoCreate(ProdutoBase):
     pass

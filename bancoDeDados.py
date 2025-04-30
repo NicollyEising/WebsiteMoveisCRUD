@@ -22,6 +22,7 @@ class Produtos(Base):
     produto = Column(String(50))
     preco = Column(Float)
     detalhes = Column(String(100))
+    img = Column(String(500))
 
 # Tabela secundaria
 favoritos_produtos = Table(
