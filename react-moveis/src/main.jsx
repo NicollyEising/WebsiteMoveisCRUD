@@ -7,6 +7,7 @@ import FirstSection from './componentes/FirstSection.jsx'
 import SecondSection from './componentes/SecondSection.jsx'
 import Banner01 from './componentes/Banner01.jsx'
 import Banner02 from './componentes/Banner02.jsx'
+import Footer from './componentes/Footer.jsx'
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
@@ -16,6 +17,7 @@ createRoot(document.getElementById('root')).render(
     <div className="column"><SecondSection /></div>
     <div className="column"><Banner01 /></div>
     <div className="column"><Banner02 /></div>
+    <div className="column"><Footer /></div>
 
 
   </StrictMode>,
