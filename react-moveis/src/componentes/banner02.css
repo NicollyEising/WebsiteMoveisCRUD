@@ -1,22 +1,123 @@
-.Banner02{
+.Banner02 {
     padding: 50px;
+    margin-left: 90px!important;
+    margin-right: 90px!important;
+}
+
+.Banner02 .row {
+    display: flex;            /* Flexbox para alinhar os itens horizontalmente */
+    align-items: center;      /* Alinha as imagens verticalmente no centro */
+    gap: 50px;
+}
+
+.Banner02 .position-relative {
+    position: relative;
+    width: 40%;               /* Ajuste a largura para que a imagem da esquerda ocupe 60% */
+    border-radius: 5px;
+    overflow: hidden;
+    display: inline-block;
+}
+
+.Banner02 .position-relative02 {
+    position: relative;
+    border-radius: 5px;
+    overflow: hidden;
+    display: inline-block;
+    justify-content: center!important;
+    text-align: center!important;
+}
+
+.Banner02 img {
+    width: 100%;
+    height: auto;
+    display: block;
+    border-radius: 10px;
+    position: relative;
+    box-shadow: none !important;
+    filter: brightness(0.5);
+    z-index: 0;
+}
+
+.texto-acima {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    z-index: 2;
+}
+
+.texto-acima02 {
+    position: absolute;
+    top: 50%;
+    left: 35%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    z-index: 2;
+}
+
+
+.texto-acima h1, p {
+    color: white!important;
     
 }
 
-.Banner02 img{
-    width: 50%;
-    border-radius: 5px;
-    box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px!important;
+.texto-acima02 h3, p {
+    color: white!important;
+}
 
+.col-sm-4 {
+    list-style: none!important;
+    display: flex;             /* Utiliza flexbox para alinhar as imagens dentro */
+    flex-direction: column;    /* Organiza as imagens em uma coluna */
+    align-items: center;       /* Centraliza as imagens horizontalmente */
+    height: 100%;              /* Garante que o container ocupe 100% da altura */
+}
+
+.imgDireita img {
+    width: 70%;              /* A imagem ocupará 100% do container */
+    height: auto;             /* Para manter a proporção */
+    display: block;
+    margin-bottom: 10px;      /* Espaço entre as imagens */
 }
 
 @media screen and (max-width: 900px) {
-    .Banner02{
-        padding: 0px;
+    .Banner02 {
+        padding: 0;
     }
-    .Banner02 img{
+
+    .Banner02 .position-relative {
+        width: 100%;
+        border-radius: 0;
+    }
+    .Banner02 .row {
+
+        gap: 0px;
+    }
+
+    .Banner02 .position-relative::before {
+        border-radius: 0;
+    }
+
+    .Banner02 img {
         width: 100%;
         border-radius: 0px;
+        margin-bottom: 10px;      /* Espaço entre as imagens */
+
+    }
+
+    .Banner02 {
+        padding: 0px;
+        margin-left: 0px!important;
+        margin-right: 0px!important;
+    }
+    .texto-acima02 {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        text-align: center;
+        z-index: 2;
     }
     
 }

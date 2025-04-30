@@ -14,6 +14,7 @@ createRoot(document.getElementById('root')).render(
     <div className="column"><FirstSection /></div>
     <div className="column"><Banner01 /></div>
     <div className="column"><SecondSection /></div>
+    <div className="column"><Banner01 /></div>
     <div className="column"><Banner02 /></div>
 
 
