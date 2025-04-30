@@ -1,8 +1,8 @@
 .banner01 {
     display: flex;
-    align-items: center;    /* Alinha verticalmente */
-    justify-content: center; /* Alinha horizontalmente, se necessário */
-    height: 100%;           /* Define uma altura para aplicar o alinhamento */
+    align-items: center;
+    justify-content: center;
+    height: 100%;
     background-color: black;
 }
 
@@ -17,4 +17,16 @@
     background-color: rgb(196, 175, 136);
     padding: 5px 10px;
     border-radius: 30px;
+}
+
+@media screen and (max-width: 900px) {
+    .banner01 {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 100%;           
+        background-color: black;
+        padding: 10px;
+        text-align: center;
+    }
 }
