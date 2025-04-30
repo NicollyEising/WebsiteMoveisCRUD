@@ -2,6 +2,7 @@ from bancoDeDados import Session, Usuario, Produtos, Favoritos, Carrinho, Carrin
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from schemas import *
+from typing import List
 
 #PS C:\Users\faculdade\Desktop\ecommercePessoal\WebsiteMoveisCRUD> uvicorn api:app --reload 
 app = FastAPI()
@@ -19,6 +20,38 @@ app.add_middleware(
 )
 
 # ------------------- PRODUTOS -------------------
+
+@app.on_event("startup")
+def adicionar_produtos_iniciais():
+    db = Session()
+    
+    # Verifica se já existem produtos para evitar duplicações
+    if not db.query(Produtos).first():
+        produtos_base = [
+            {
+                "produto": "Cadeira Ergonômica Executiva",
+                "preco": 789.90,
+                "detalhes": "string",
+                "img": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQlKeLOk8rMiR16KE9Oz2M6bggw6FQxHuoGSA&s"
+            },
+            {
+                "produto": "Cadeira Ergonômica Executiva",
+                "preco": 789.90,
+                "detalhes": "string",
+                "img": "https://a-static.mlcdn.com.br/800x560/cadeira-escritorio-ergonomica-confortavel-reclinavel-tela-mesh-corrige-postura-nr17-top-seat-preta/topseat/13129122566/0ecf34d7e4c73710f9544e8cf2e8118f.jpeg"
+            }
+        ]
+        
+        for item in produtos_base:
+            for _ in range(5):  # Adiciona 5 de cada produto
+                produto = Produtos(**item)
+                db.add(produto)
+        
+        db.commit()
+    
+    db.close()
+
+
 @app.post("/produtos", response_model=ProdutoRead)
 def criar_produto(prod: ProdutoCreate):
     db = Session()
@@ -61,6 +94,7 @@ def deletar_produto(id: int):
     return {"ok": True}
 
 # ------------------- USUARIOS -------------------
+
 @app.post("/usuarios", response_model=UsuarioRead)
 def criar_usuario(usuario: UsuarioCreate):
     db = Session()
@@ -103,6 +137,7 @@ def deletar_usuario(id: int):
     return {"ok": True}
 
 # ------------------- FAVORITOS -------------------
+
 @app.post("/favoritos", response_model=FavoritosRead)
 def criar_favoritos(data: FavoritosCreate):
     db = Session()
@@ -133,6 +168,7 @@ def deletar_favoritos(id: int):
     return {"ok": True}
 
 # ------------------- CARRINHO -------------------
+
 @app.post("/carrinhos", response_model=CarrinhoRead)
 def criar_carrinho(carrinho: CarrinhoCreate):
     db = Session()
