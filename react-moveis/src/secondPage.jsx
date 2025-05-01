@@ -7,37 +7,36 @@ import './secondPage.css';
 import { useParams } from 'react-router-dom';
 
 function SecondPage() {
-  const { id } = useParams(); // Pegando o id da URL
-  const [item, setItem] = useState(null); // Estado para armazenar o item
-  const [loading, setLoading] = useState(true); // Estado para controle de carregamento
+  const { id } = useParams();
+  const [item, setItem] = useState(null);
+  const [loading, setLoading] = useState(true); 
 
   useEffect(() => {
-    // Verificando se o id é um número e se está sendo passado corretamente
-    console.log('ID:', id); // Verifique se o id está sendo passado corretamente no console
 
-    // Fetch para buscar o item baseado no id
-    fetch(`http://127.0.0.1:8000/produtos/${id}?produto_id=${id}`)  // Ajuste aqui para passar o produto_id na query string
+    console.log('ID:', id);
+
+    fetch(`http://127.0.0.1:8000/produtos/${id}?produto_id=${id}`)
       .then((response) => {
         if (!response.ok) throw new Error('Erro ao buscar os dados');
         return response.json();
       })
       .then((data) => {
-        console.log('Dados recebidos da API:', data); // Verifica o conteúdo completo da resposta
+        console.log('Dados recebidos da API:', data);
         setItem(data);
         setLoading(false);
       })      
       .catch((error) => {
-        console.error('Erro:', error);  // Veja o erro completo aqui
+        console.error('Erro:', error); 
         setLoading(false);
       });
-  }, [id]); // O efeito será executado novamente caso o id mude
+  }, [id]);
 
   if (loading) {
-    return <div>Carregando...</div>; // Exibe uma mensagem de carregamento enquanto os dados não são carregados
+    return <div>Carregando...</div>; 
   }
 
   if (!item) {
-    return <div>Item não encontrado</div>; // Caso o item não seja encontrado
+    return <div>Item não encontrado</div>;
   }
 
   return (
