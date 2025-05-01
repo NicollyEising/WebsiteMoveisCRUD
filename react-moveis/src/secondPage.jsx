@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react';
+import { Link, useParams } from 'react-router-dom'; // Importação do Link
 import Navbar from './componentes/Navbar.jsx';
 import Banner01 from './componentes/Banner01.jsx';
 import Footer from './componentes/Footer.jsx';
 import './index.css';
 import './secondPage.css';
-import { useParams } from 'react-router-dom';
 
 function SecondPage() {
   const { id } = useParams();
@@ -12,7 +12,6 @@ function SecondPage() {
   const [loading, setLoading] = useState(true); 
 
   useEffect(() => {
-
     console.log('ID:', id);
 
     fetch(`http://127.0.0.1:8000/produtos/${id}?produto_id=${id}`)
@@ -47,6 +46,14 @@ function SecondPage() {
         <div className="row">
           <div className="col-sm detalhesImg"><img src={item.img} alt="" /></div>
           <div className="col-sm detalhesItem">
+            {/* Navegação */}
+            <nav aria-label="Page navigation example">
+              <ol class="breadcrumb">
+                <li class="breadcrumb-item"><Link to="/" className="page-link">Home</Link> {/* Link para a home */}</li>
+                <li class="breadcrumb-item active w-50"><a className="page-link" href="#">{item.produto}</a></li>
+              </ol>
+            </nav>
+            {/* Detalhes do produto */}
             <h1>{item.produto}</h1>
             <p>Descrição: {item.detalhes}</p>
             <h3>Preço: {item.preco}</h3>
