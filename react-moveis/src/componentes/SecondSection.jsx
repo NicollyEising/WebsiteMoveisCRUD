@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import "./SecondSection.css";
+import { Link } from 'react-router-dom';
 
 const Carousel = () => {
   const [items, setItems] = useState([]);
@@ -66,10 +67,11 @@ const Carousel = () => {
                     alt={item.produto}
                   />
                   <div className="card-body">
-                    <a href="http://">
-                      <h5 className="card-title">{item.produto}</h5>
-                      <p className="card-text"><strong>Preço:</strong> R$ {item.preco}</p>
-                    </a>
+                  <Link to={`/secondPage/${item.id}`}>
+                    <h5 className="card-title">{item.produto}</h5>
+                    <p className="card-text"><strong>Preço:</strong> R$ {item.preco}</p>
+                  </Link>
+
                   </div>
                 </div>
               ))}

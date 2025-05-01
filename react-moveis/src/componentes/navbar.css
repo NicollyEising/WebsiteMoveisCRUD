@@ -15,7 +15,7 @@
 }
 
 .search-container.show {
-  max-width: 500px; /* ajuste conforme necessário */
+  max-width: 500px;
   opacity: 1;
 }
 
@@ -100,11 +100,11 @@ li a{
     }
 
     .dropdown-menu {
-        width: 100% !important; /* Garante que o menu ocupe 100% da largura */
+        width: 100% !important;
     }
     .dropdown-item {
         padding: 10px!important;
-        display: block; /* Faz o item ocupar toda a largura */
-        width: 100%;    /* Garante que ocupe 100% da largura disponível */
+        display: block;
+        width: 100%;
     }
 }

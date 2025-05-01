@@ -1,0 +1,46 @@
+
+
+.detalhesItem {
+    display: flex;
+    flex-direction: column;
+    justify-content: center; /* Centraliza verticalmente */
+    height: 500px; /* O pai deve ter altura definida */
+  }
+
+.detalhesItem p{
+    color: black!important;
+}
+
+.detalhesImg img{
+    width: 100%;
+    max-width: 800px;
+}
+
+.banner01{
+    margin-top: 65px!important;
+}
+
+Footer {
+    background-color: #333;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    bottom: -50px!important;
+    left: 0;
+    width: 100%;
+  }
+  
+.addCarrinho{
+    background-color: burlywood;
+    padding: 10px 20px;
+    border-radius: 20px;
+    font-weight: 700!important;
+    text-transform: uppercase;
+    margin-top: 20px;
+}
+
+.addCarrinho:hover{
+    background-color: burlywood!important;
+}

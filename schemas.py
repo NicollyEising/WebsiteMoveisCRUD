@@ -7,12 +7,33 @@ class ProdutoBase(BaseModel):
     preco: float
     detalhes: Optional[str]
     img: str
+    id: int 
 
 class ProdutoCreate(ProdutoBase):
     pass
 
 class ProdutoRead(ProdutoBase):
     id: int
+    class Config:
+        orm_mode = True
+
+class ProdutoSchema(BaseModel):
+    produto: str
+    preco: float
+    detalhes: Optional[str]
+    img: str
+    id: int 
+
+    class Config:
+        orm_mode = True
+
+class ProdutoRead(BaseModel):
+    produto: str
+    preco: float
+    detalhes: Optional[str]
+    img: str
+    id: int
+
     class Config:
         orm_mode = True
 
@@ -31,6 +52,7 @@ class UsuarioRead(BaseModel):
     email: str
     class Config:
         orm_mode = True
+        
 
 # -------- Favoritos --------
 class FavoritosCreate(BaseModel):

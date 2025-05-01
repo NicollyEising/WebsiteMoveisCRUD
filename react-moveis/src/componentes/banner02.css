@@ -5,14 +5,14 @@
 }
 
 .Banner02 .row {
-    display: flex;            /* Flexbox para alinhar os itens horizontalmente */
-    align-items: center;      /* Alinha as imagens verticalmente no centro */
+    display: flex;
+    align-items: center;
     gap: 50px;
 }
 
 .Banner02 .position-relative {
     position: relative;
-    width: 40%;               /* Ajuste a largura para que a imagem da esquerda ocupe 60% */
+    width: 40%;
     border-radius: 5px;
     overflow: hidden;
     display: inline-block;
@@ -68,17 +68,17 @@
 
 .col-sm-4 {
     list-style: none!important;
-    display: flex;             /* Utiliza flexbox para alinhar as imagens dentro */
-    flex-direction: column;    /* Organiza as imagens em uma coluna */
-    align-items: center;       /* Centraliza as imagens horizontalmente */
-    height: 100%;              /* Garante que o container ocupe 100% da altura */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100%;
 }
 
 .imgDireita img {
-    width: 70%;              /* A imagem ocupará 100% do container */
-    height: auto;             /* Para manter a proporção */
+    width: 70%;
+    height: auto;
     display: block;
-    margin-bottom: 10px;      /* Espaço entre as imagens */
+    margin-bottom: 10px;
 }
 
 @media screen and (max-width: 900px) {

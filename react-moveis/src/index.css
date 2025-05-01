@@ -13,6 +13,7 @@ body{
   font-family: "Nunito Sans", sans-serif;
   font-size: 16px!important;
   text-decoration: none;
+  overflow-x: hidden;
 }
 
 /* Estilo para a Navbar */
@@ -29,4 +30,13 @@ body{
 /* Estilo para o conteúdo abaixo da Navbar */
 .column {
   margin-top: 40px;
+}
+
+/* No arquivo de estilo do Banner01 */
+.banner {
+  margin-bottom: 20px; /* Ajuste o valor conforme necessário */
+}
+
+.footer {
+  margin-top: 20px; /* Ajuste o valor conforme necessário */
 }

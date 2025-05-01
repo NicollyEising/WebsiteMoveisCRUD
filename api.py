@@ -31,13 +31,13 @@ def adicionar_produtos_iniciais():
             {
                 "produto": "Cadeira Ergonômica Executiva",
                 "preco": 789.90,
-                "detalhes": "string",
-                "img": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQlKeLOk8rMiR16KE9Oz2M6bggw6FQxHuoGSA&s"
+                "detalhes": "Cadeira ergonômica com encosto ajustável, ideal para escritórios. Revestimento em tela mesh e apoio lombar.",
+                "img": "https://images.tcdn.com.br/img/img_prod/1101616/cadeira_ergonomica_relax_presidente_tokyo_para_escritorio_2159_variacao_3677_1_4536d74b142762e2ec01955a0f8db42f.jpg"
             },
             {
                 "produto": "Cadeira Ergonômica Executiva",
                 "preco": 789.90,
-                "detalhes": "string",
+                "detalhes": "Cadeira com base giratória, ajuste de altura e apoio para os braços. Conforto para longas jornadas de trabalho.",
                 "img": "https://a-static.mlcdn.com.br/800x560/cadeira-escritorio-ergonomica-confortavel-reclinavel-tela-mesh-corrige-postura-nr17-top-seat-preta/topseat/13129122566/0ecf34d7e4c73710f9544e8cf2e8118f.jpeg"
             }
         ]
@@ -69,6 +69,16 @@ def listar_produtos():
     db.close()
     return data
 
+@app.get("/produtos/{id}", response_model=ProdutoRead)
+def obter_produto(produto_id: int):
+    db = Session()
+    produto = db.query(Produtos).filter(Produtos.id == produto_id).first()
+    db.close()
+    if produto is None:
+        raise HTTPException(status_code=404, detail="Produto não encontrado")
+    return produto
+
+
 @app.put("/produtos/{id}", response_model=ProdutoRead)
 def atualizar_produto(id: int, prod: ProdutoCreate):
     db = Session()
@@ -92,6 +102,16 @@ def deletar_produto(id: int):
     db.commit()
     db.close()
     return {"ok": True}
+
+
+@app.get("/produtos/busca/", response_model=List[ProdutoSchema])
+def buscar_produto_por_nome(nome: str):
+    db = Session()
+    produtos = db.query(Produtos).filter(Produtos.produto.ilike(f'%{nome}%')).all()
+    db.close()
+    if not produtos:
+        raise HTTPException(status_code=404, detail="Nenhum produto encontrado.")
+    return produtos
 
 # ------------------- USUARIOS -------------------
 
