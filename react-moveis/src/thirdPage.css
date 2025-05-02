@@ -1,0 +1,83 @@
+.container ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px; /* Espaçamento entre os cards */
+    justify-content: flex-start;
+    list-style: none;
+  }
+  
+
+  
+  .card {
+    width: 100%; /* Faz com que o card ocupe todo o espaço disponível do <li> */
+  }
+
+  .cardLista:not(:last-child) {
+    margin-bottom: -100px;
+}
+
+#resultado{
+
+    margin-left: 35px;
+    margin-bottom: -50px;
+}
+
+#adicionarCarrinhoCard{
+    width: 100%;
+    justify-content: center;
+    background-color: black!important;
+    color: white!important;
+}
+
+.heart-icon {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    background: transparent;
+    border: none;
+    color: black!important;
+    font-size: 1.5rem;
+    z-index: 1;
+    cursor: pointer;
+  }
+
+  .heart-icon:hover {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    background: transparent;
+    border: none;
+    color: rgb(215, 1, 1)!important;
+    font-size: 1.5rem;
+    z-index: 1;
+    cursor: pointer;
+  }
+
+  .pagination .page-link{
+    margin: 0px -10px!important;
+    font-size: 1em;;
+}
+
+
+.pagination .page-item .page-link {
+    color: #6c757d; 
+    background-color: transparent;
+    border: none; 
+  }
+  
+
+  .pagination .page-item.disabled .page-link {
+    color: #6c757d;
+  }
+  
+ 
+  .pagination .page-item:not(.active) .page-link {
+    color: #6c757d;
+  }
+  
+ 
+  .pagination .page-item.active .page-link {
+    color: #6c757d !important;
+    background-color: transparent !important;
+    border: none !important; 
+  }

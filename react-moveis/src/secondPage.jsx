@@ -50,12 +50,17 @@ function SecondPage() {
             <nav aria-label="Page navigation example">
               <ol class="breadcrumb">
                 <li class="breadcrumb-item"><Link to="/" className="page-link">Home</Link> {/* Link para a home */}</li>
-                <li class="breadcrumb-item active w-50"><a className="page-link" href="#">{item.produto}</a></li>
+                <li class="breadcrumb-item active w-75"><a className="page-link" href="#">{item.produto}</a></li>
               </ol>
             </nav>
             {/* Detalhes do produto */}
             <h1>{item.produto}</h1>
-            <p>Descrição: {item.detalhes}</p>
+              {/*Caracteristicas*/}
+              <div className="caracteristicas d-flex gap-2 pb-3">
+              <span class="badge badge1">ergonômica</span>
+              <span class="badge badge2">ajustável</span>
+              </div>
+            <p>{item.detalhes}</p>
             <h3>Preço: {item.preco}</h3>
             <button className='addCarrinho'>Adicionar ao Carrinho</button>
           </div>

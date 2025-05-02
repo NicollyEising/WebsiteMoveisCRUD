@@ -8,6 +8,8 @@ class ProdutoBase(BaseModel):
     detalhes: Optional[str]
     img: str
     id: int 
+    marca: str
+    cor: str
 
 class ProdutoCreate(ProdutoBase):
     pass
@@ -23,6 +25,8 @@ class ProdutoSchema(BaseModel):
     detalhes: Optional[str]
     img: str
     id: int 
+    marca: str
+    cor: str
 
     class Config:
         orm_mode = True

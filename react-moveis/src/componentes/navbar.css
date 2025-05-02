@@ -87,6 +87,10 @@ li a{
     display: flex!important;
 }
 
+.page-link{
+    font-size: 1.3em;
+}
+
 @media screen and (max-width: 720px) {
     .icons{
         display: flex!important;

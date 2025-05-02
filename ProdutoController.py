@@ -1,8 +1,8 @@
 from bancoDeDados import Produtos, Session
 from UserController import session
 
-def criar_produto(produto, preco, detalhes, img):
-    novo_produto = Produtos(produto=produto, preco=preco, detalhes=detalhes, img=img)
+def criar_produto(produto, preco, detalhes, img, marca, cor):
+    novo_produto = Produtos(produto=produto, preco=preco, detalhes=detalhes, img=img, marca=marca, cor=cor)
     session.add(novo_produto)
     session.commit()
     print(f"Produto criado: {novo_produto.id} - {novo_produto.produto}")
@@ -10,17 +10,19 @@ def criar_produto(produto, preco, detalhes, img):
 def listar_produtos():
     produtos = session.query(Produtos).all()
     for produto in produtos:
-        print(f"{produto.id}: {produto.produto} - {produto.preco} - {produto.detalhes} - {produto.img}")
+        print(f"{produto.id}: {produto.produto} - {produto.preco} - {produto.detalhes} - {produto.img} - {produto.marca} - {produto.cor}")
 
-def atualizar_produtos(id_produto, novo_preco, novo_detalhe, novo_produto, nova_imagem):
+def atualizar_produtos(id_produto, novo_preco, novo_detalhe, novo_produto, nova_imagem, nova_marca, nova_cor):
     produto = session.query(Produtos).filter_by(id=id_produto).first()
     if produto:
         produto.produto = novo_produto
         produto.preco = novo_preco
         produto.detalhes = novo_detalhe
         produto.img = nova_imagem
+        produto.marca = nova_marca
+        produto.cor = nova_cor
         session.commit()
-        print(f"Produto atualizado: {produto.produto} - {produto.preco} - {produto.detalhes} - {produto.img}")
+        print(f"Produto atualizado: {produto.produto} - {produto.preco} - {produto.detalhes} - {produto.img} - {produto.marca} - {produto.cor}")
     else:
         print("Produto não encontrado.")
 

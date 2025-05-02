@@ -23,6 +23,8 @@ class Produtos(Base):
     preco = Column(Float)
     detalhes = Column(String(100))
     img = Column(String(500))
+    marca = Column(String(100))  # novo campo
+    cor = Column(String(50))     # novo campo
 
 # Tabela secundaria
 favoritos_produtos = Table(

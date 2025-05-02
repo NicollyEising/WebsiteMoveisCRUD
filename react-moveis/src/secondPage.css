@@ -44,3 +44,16 @@ Footer {
 .addCarrinho:hover{
     background-color: burlywood!important;
 }
+
+.badge {
+    width: 100px;
+}
+
+.badge1{
+    background-color: rgb(141, 93, 30) ;
+    color: white!important;
+}
+
+.badge2{
+    background-color: rgb(239, 169, 79) ;
+}
