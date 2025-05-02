@@ -33,7 +33,7 @@ def adicionar_produtos_iniciais():
                 "preco": 789.90,
                 "detalhes": "Cadeira ergonômica com encosto ajustável, ideal para escritórios. Revestimento em tela mesh e apoio lombar.",
                 "img": "https://images.tcdn.com.br/img/img_prod/1101616/cadeira_ergonomica_relax_presidente_tokyo_para_escritorio_2159_variacao_3677_1_4536d74b142762e2ec01955a0f8db42f.jpg",
-                "marca": "Tokyo",
+                "marca": "Herman Miller",
                 "cor": "Preta"
             },
             {
@@ -41,8 +41,8 @@ def adicionar_produtos_iniciais():
                 "preco": 789.90,
                 "detalhes": "Cadeira com base giratória, ajuste de altura e apoio para os braços. Conforto para longas jornadas de trabalho.",
                 "img": "https://a-static.mlcdn.com.br/800x560/cadeira-escritorio-ergonomica-confortavel-reclinavel-tela-mesh-corrige-postura-nr17-top-seat-preta/topseat/13129122566/0ecf34d7e4c73710f9544e8cf2e8118f.jpeg",
-                "marca": "Tokyo",
-                "cor": "Preta"
+                "marca": "Flexform",
+                "cor": "Cinza"
             }
         ]
         
