@@ -1,23 +1,48 @@
 from bancoDeDados import Session, Usuario, Produtos, Favoritos, Carrinho, CarrinhoItem
-from fastapi import FastAPI, HTTPException
+from fastapi import Depends, FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from schemas import *
 from typing import List
+from sqlalchemy.orm import Session as DBSession
+from passlib.hash import bcrypt
+import jwt
+from datetime import datetime, timedelta
+from fastapi.exceptions import RequestValidationError
+from fastapi.responses import JSONResponse
+from fastapi import status
+from sqlalchemy.orm import joinedload
+
+
+
 
 #PS C:\Users\faculdade\Desktop\ecommercePessoal\WebsiteMoveisCRUD> uvicorn api:app --reload 
 app = FastAPI()
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # Ou especifique "http://localhost:3000" para mais segurança
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 @app.get("/")
 def root():
     return {"message": "API está funcionando"}
 
+@app.exception_handler(RequestValidationError)
+async def validation_exception_handler(request, exc):
+    return JSONResponse(
+        status_code=status.HTTP_400_BAD_REQUEST,
+        content={"detail": exc.errors()},
+    )
 
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["*"],
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
+def get_db():
+    db = Session()
+    try:
+        yield db
+    finally:
+        db.close()
 
 # ------------------- PRODUTOS -------------------
 
@@ -122,12 +147,33 @@ def buscar_produto_por_nome(nome: str):
 @app.post("/usuarios", response_model=UsuarioRead)
 def criar_usuario(usuario: UsuarioCreate):
     db = Session()
-    novo = Usuario(**usuario.dict())
-    db.add(novo)
-    db.commit()
-    db.refresh(novo)
+    try:
+        novo = Usuario(**usuario.dict())
+        db.add(novo)
+        db.flush()  # Obtém o ID do usuário antes do commit
+
+        # Criar favoritos vazio
+        favoritos = Favoritos(usuario_id=novo.id)
+        db.add(favoritos)
+
+        # Criar carrinho vazio
+        carrinho = Carrinho(usuario_id=novo.id)
+        db.add(carrinho)
+
+        db.commit()
+        db.refresh(novo)
+        return UsuarioRead(id=novo.id, nome=novo.nome, email=novo.email, carrinho=carrinho.id)
+    finally:
+        db.close()
+
+
+@app.get("/usuarios/{id}", response_model=UsuarioRead)
+def pegar_usuario_por_id(id: int):
+    db = Session()
+    usuario = db.query(Usuario).filter(Usuario.id == id).first()
     db.close()
-    return novo
+    return usuario
+
 
 @app.get("/usuarios", response_model=List[UsuarioRead])
 def listar_usuarios():
@@ -159,6 +205,33 @@ def deletar_usuario(id: int):
     db.commit()
     db.close()
     return {"ok": True}
+
+@app.post("/login")
+def login_usuario(data: LoginData, db: DBSession = Depends(get_db)):
+    usuario = db.query(Usuario).filter(Usuario.email == data.email).first()
+    
+    if not usuario or usuario.senha != data.senha:
+        raise HTTPException(status_code=401, detail="Credenciais inválidas")
+    
+    # Acessa o carrinho do usuário
+    carrinho = db.query(Carrinho).filter(Carrinho.usuario_id == usuario.id).first()
+
+    if not carrinho:
+        raise HTTPException(status_code=404, detail="Carrinho não encontrado")
+
+    # Gerar um token JWT
+    token = jwt.encode(
+        {"usuario_id": usuario.id, "exp": datetime.utcnow() + timedelta(hours=1)},
+        "secret-key",  # Chave secreta para assinatura do token
+        algorithm="HS256"
+    )
+
+    return {
+        "mensagem": "Login realizado com sucesso",
+        "token": token,
+        "userId": usuario.id,
+        "carrinhoId": carrinho.id  # Passa o ID do carrinho associado ao usuário
+    }
 
 # ------------------- FAVORITOS -------------------
 
@@ -207,11 +280,17 @@ def criar_carrinho(carrinho: CarrinhoCreate):
     return novo_carrinho
 
 @app.get("/carrinhos", response_model=List[CarrinhoRead])
-def listar_carrinhos():
-    db = Session()
-    data = db.query(Carrinho).all()
-    db.close()
-    return data
+def listar_carrinhos(usuario_id: int, db: DBSession = Depends(get_db)):
+    # Carrega os carrinhos do usuário com os itens e os produtos relacionados
+    db_carrinhos = db.query(Carrinho).filter(Carrinho.usuario_id == usuario_id).options(
+        joinedload(Carrinho.itens).joinedload(CarrinhoItem.produto)  # Carrega os produtos associados aos itens
+    ).all()
+
+    if not db_carrinhos:
+        raise HTTPException(status_code=404, detail="Carrinho não encontrado para esse usuário.")
+    
+    # Convertendo os carrinhos e itens para o formato esperado
+    return db_carrinhos
 
 @app.delete("/carrinhos/{id}")
 def deletar_carrinho(id: int):
@@ -222,4 +301,31 @@ def deletar_carrinho(id: int):
     db.delete(c)
     db.commit()
     db.close()
+    return {"ok": True}
+
+@app.post("/carrinhos/{carrinho_id}/itens")
+def adicionar_item_ao_carrinho(carrinho_id: int, item: CarrinhoItemCreate, db: DBSession = Depends(get_db)):
+    carrinho = db.query(Carrinho).get(carrinho_id)
+    if not carrinho:
+        raise HTTPException(status_code=404, detail="Carrinho não encontrado.")
+    novo_item = CarrinhoItem(carrinho_id=carrinho_id, **item.dict())
+    db.add(novo_item)
+    db.commit()
+    return {"ok": True}
+
+
+@app.delete("/carrinhos/{carrinho_id}/itens/{item_id}")
+def deletar_item_do_carrinho(carrinho_id: int, item_id: int, db: DBSession = Depends(get_db)):
+    # Verifica se o carrinho existe
+    carrinho = db.query(Carrinho).get(carrinho_id)
+    if not carrinho:
+        raise HTTPException(status_code=404, detail="Carrinho não encontrado.")
+    
+    # Verifica se o item existe no carrinho
+    item = db.query(CarrinhoItem).filter(CarrinhoItem.id == item_id, CarrinhoItem.carrinho_id == carrinho_id).first()
+    if not item:
+        raise HTTPException(status_code=404, detail="Item não encontrado no carrinho.")
+    
+    db.delete(item)
+    db.commit()
     return {"ok": True}

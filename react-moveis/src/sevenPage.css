@@ -1,0 +1,19 @@
+/* Alterando a cor dos parágrafos dentro do componente CarrinhoList */
+.carrinho-list p {
+    color: black !important;
+  }
+ .container .carrinhoTitulo{
+    margin-bottom: -70px!important; 
+    font-size: 1.9em;
+  }
+
+  #finalizarCompra{
+    background-color: burlywood!important;
+    border-radius: 30px ;
+  }
+
+  #finalizarCompra:focus {
+    outline: none;
+    border: none;
+    box-shadow: none;
+  }

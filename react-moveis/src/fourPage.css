@@ -1,0 +1,46 @@
+.login{
+    color: black!important;
+    text-align: center;
+}
+
+#botaoCadastro{
+    background-color: burlywood!important;
+    border-radius: 30px;
+}
+
+.facaLogin{
+    background-color: transparent;
+    text-decoration: underline!important;
+}
+
+p.login .facaLogin {
+    text-decoration: underline !important;
+}
+
+
+.textoBurlywood{
+    color: burlywood!important;
+}
+
+.input-icon-wrapper {
+    display: flex;
+    align-items: center;
+    border: 1px solid #ccc;
+    padding: 0.5rem;
+    border-radius: 5px;
+    background-color: #fff;
+  }
+  
+  .input-icon-wrapper i {
+    margin-right: 0.5rem;
+    font-size: 1.2rem;
+    color: #666;
+  }
+  
+  .input-icon-wrapper input {
+    border: none;
+    outline: none;
+    flex: 1;
+    padding: 0;
+  }
+  

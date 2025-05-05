@@ -1,6 +1,7 @@
 from pydantic import BaseModel
 from typing import List, Optional
 
+
 # -------- Produtos --------
 class ProdutoBase(BaseModel):
     produto: str
@@ -56,6 +57,10 @@ class UsuarioRead(BaseModel):
     email: str
     class Config:
         orm_mode = True
+
+class LoginData(BaseModel):
+    email: str
+    senha: str
         
 
 # -------- Favoritos --------
@@ -71,25 +76,33 @@ class FavoritosRead(BaseModel):
         orm_mode = True
 
 # -------- Carrinho e Itens --------
+# Classe base para o item no carrinho
 class CarrinhoItemBase(BaseModel):
     produto_id: int
     quantidade: int
 
+# Classe para criação de um item no carrinho
 class CarrinhoItemCreate(CarrinhoItemBase):
     pass
 
+# Classe para leitura de um item no carrinho, incluindo os dados do produto
 class CarrinhoItemRead(CarrinhoItemBase):
     id: int
+    produto: ProdutoRead  # Incluindo as informações do produto
+
     class Config:
         orm_mode = True
 
+# Classe para criação de um carrinho
 class CarrinhoCreate(BaseModel):
     usuario_id: int
-    itens: List[CarrinhoItemBase]
+    itens: List[CarrinhoItemBase]  # Lista de itens a serem adicionados no carrinho
 
+# Classe para leitura de um carrinho, incluindo os itens do carrinho e os dados dos produtos
 class CarrinhoRead(BaseModel):
     id: int
     usuario_id: int
-    itens: List[CarrinhoItemRead]
+    itens: List[CarrinhoItemRead]  # Lista de itens no carrinho com os dados completos
+
     class Config:
         orm_mode = True

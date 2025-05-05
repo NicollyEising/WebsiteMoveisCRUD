@@ -76,12 +76,12 @@ const Navbar = () => {
               </form>
             </div>
 
-            <a href="#" className="btnCart">
+            <Link to="/fourPage" className="page-link">
               <button className="bi bi-person" aria-label="Person Icon"></button>
-            </a>
-            <a href="#" className="btnCart">
+            </Link>
+            <Link to="/sevenPage" className="page-link">
               <button className="bi bi-cart2" aria-label="Cart Icon"></button>
-            </a>
+              </Link>
             <a href="#" className="btnCart">
               <button className="bi bi-heart-fill" aria-label="Favorites Icon"></button>
             </a>

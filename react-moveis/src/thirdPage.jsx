@@ -20,32 +20,57 @@ const ThirdPage = () => {
         if (!response.ok) throw new Error("Erro ao buscar os dados");
         return response.json();
       })
-      .then((data) => {
-        setProdutos(data);
-      })
+      .then((data) => setProdutos(data))
       .catch((error) => console.error("Erro:", error))
       .finally(() => setLoading(false));
   }, [nome]);
 
+  const addCarrinho = (produto) => {
+    const userId = localStorage.getItem('userId');
+    const carrinhoId = localStorage.getItem("carrinhoId");
+
+    // Verifica se o carrinhoId existe
+    if (carrinhoId) {
+        console.log("Carrinho ID:", carrinhoId);
+    } else {
+        console.log("Carrinho ID não encontrado no localStorage.");
+    }
+  
+    const novoItem = {
+      produto_id: produto.id,
+      quantidade: 1
+    };
+  
+    fetch(`http://127.0.0.1:8000/carrinhos/${carrinhoId}/itens`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(novoItem)
+    })
+    .then(response => {
+      if (!response.ok) throw new Error('Erro ao adicionar ao carrinho');
+      return response.json();
+    })
+    .then(data => {
+      alert('Item adicionado ao carrinho com sucesso');
+    })
+    .catch(error => {
+      console.error('Erro:', error);
+      alert('Erro ao adicionar item ao carrinho');
+    });
+  };
+  
+
   if (loading) return <div>Carregando...</div>;
   if (produtos.length === 0) return <div>Nenhum produto encontrado.</div>;
 
-  // Filtragem de produtos
   const produtosFiltrados = produtos.filter((produto) => {
-    const marcaProduto = produto.marca?.trim().toLowerCase();  // Remover espaços extras e normalizar para minúsculas
+    const marcaProduto = produto.marca?.trim().toLowerCase();
     const corProduto = produto.cor?.trim().toLowerCase();
-    
-    // Garantir que a marca selecionada não tenha espaços extras
     const marcaSelecionadaTrimmed = marcaSelecionada?.trim().toLowerCase();
     const corSelecionadaTrimmed = corSelecionada?.trim().toLowerCase();
 
-    // Log de depuração para verificar valores
-    console.log('Produto Marca:', marcaProduto);
-    console.log('Marca Selecionada:', marcaSelecionadaTrimmed);
-    console.log('Produto Cor:', corProduto);
-    console.log('Cor Selecionada:', corSelecionadaTrimmed);
-
-    // Comparações de marca e cor
     const correspondeMarca = marcaSelecionadaTrimmed ? marcaProduto === marcaSelecionadaTrimmed : true;
     const correspondeCor = corSelecionadaTrimmed ? corProduto === corSelecionadaTrimmed : true;
 
@@ -58,15 +83,11 @@ const ThirdPage = () => {
   const totalPaginas = Math.ceil(produtosFiltrados.length / itensPorPagina);
 
   const handlePaginaAnterior = () => {
-    if (paginaAtual > 1) {
-      setPaginaAtual(paginaAtual - 1);
-    }
+    if (paginaAtual > 1) setPaginaAtual(paginaAtual - 1);
   };
 
   const handlePaginaSeguinte = () => {
-    if (paginaAtual < totalPaginas) {
-      setPaginaAtual(paginaAtual + 1);
-    }
+    if (paginaAtual < totalPaginas) setPaginaAtual(paginaAtual + 1);
   };
 
   return (
@@ -75,47 +96,61 @@ const ThirdPage = () => {
       <Banner01 />
       <div className="container">
         <div className="row">
-          <div className="col-sm-2 mt-5">
+          <div className="col-sm mt-5">
             <div className="listaFiltragem">
               <h5 className="pb-3">Filtrar por</h5>
 
               <h5>Marca</h5>
-              <div className="form-check">
-                <input className="form-check-input" type="radio" name="marca" id="marca1" value="herman miller"
-                  checked={marcaSelecionada === "herman miller"}
-                  onChange={(e) => setMarcaSelecionada(e.target.value)} />
-                <label className="form-check-label" htmlFor="marca1">Herman Miller</label>
-              </div>
-              <div className="form-check">
-                <input className="form-check-input" type="radio" name="marca" id="marca2" value="flexform"
-                  checked={marcaSelecionada === "flexform"}
-                  onChange={(e) => setMarcaSelecionada(e.target.value)} />
-                <label className="form-check-label" htmlFor="marca2">Flexform</label>
-              </div>
+              {["herman miller", "flexform"].map((marca) => (
+                <div className="form-check" key={marca}>
+                  <input
+                    className="form-check-input"
+                    type="radio"
+                    name="marca"
+                    id={`marca-${marca}`}
+                    value={marca}
+                    checked={marcaSelecionada === marca}
+                    onChange={(e) => setMarcaSelecionada(e.target.value)}
+                  />
+                  <label className="form-check-label" htmlFor={`marca-${marca}`}>
+                    {marca.charAt(0).toUpperCase() + marca.slice(1)}
+                  </label>
+                </div>
+              ))}
 
               <h5 className="mt-3">Cor</h5>
-              <div className="form-check">
-                <input className="form-check-input color-white" type="radio" name="cor" id="cor1" value="preta"
-                  checked={corSelecionada === "preta"}
-                  onChange={(e) => setCorSelecionada(e.target.value)} />
-                <label className="form-check-label" htmlFor="cor1">Preto</label>
-              </div>
-              <div className="form-check">
-                <input className="form-check-input" type="radio" name="cor" id="cor2" value="cinza"
-                  checked={corSelecionada === "cinza"}
-                  onChange={(e) => setCorSelecionada(e.target.value)} />
-                <label className="form-check-label" htmlFor="cor2">Cinza</label>
-              </div>
+              {["preta", "cinza"].map((cor) => (
+                <div className="form-check" key={cor}>
+                  <input
+                    className="form-check-input"
+                    type="radio"
+                    name="cor"
+                    id={`cor-${cor}`}
+                    value={cor}
+                    checked={corSelecionada === cor}
+                    onChange={(e) => setCorSelecionada(e.target.value)}
+                  />
+                  <label className="form-check-label" htmlFor={`cor-${cor}`}>
+                    {cor.charAt(0).toUpperCase() + cor.slice(1)}
+                  </label>
+                </div>
+              ))}
 
-              <button id="botaoLimpar" className="btn mt-3" onClick={() => {
-                setMarcaSelecionada("");
-                setCorSelecionada("");
-              }}>Limpar filtros</button>
+              <button
+                id="botaoLimpar"
+                className="btn mt-3"
+                onClick={() => {
+                  setMarcaSelecionada("");
+                  setCorSelecionada("");
+                }}
+              >
+                Limpar filtros
+              </button>
             </div>
           </div>
 
           <div className="col-sm-10">
-            <nav aria-label="Page navigation example">
+            <nav aria-label="breadcrumb">
               <ol className="breadcrumb mx-4 px-2 mt-5">
                 <li className="breadcrumb-item">
                   <Link to="/" className="page-link">Home</Link>
@@ -143,14 +178,20 @@ const ThirdPage = () => {
                         <h5 className="card-title">{produto.produto}</h5>
                         <p className="card-text"><strong>Preço:</strong> R$ {produto.preco}</p>
                       </Link>
-                      <button id="adicionarCarrinhoCard" className="addCarrinho">Carrinho</button>
+                      <button
+                        id="adicionarCarrinhoCard"
+                        className="addCarrinho"
+                        onClick={() => addCarrinho(produto)}
+                      >
+                        Carrinho
+                      </button>
                     </div>
                   </div>
                 </li>
               ))}
             </ul>
 
-            <nav aria-label="Page navigation example">
+            <nav aria-label="Page navigation">
               <ul className="pagination justify-content-end">
                 <li className={`page-item ${paginaAtual === 1 ? 'disabled' : ''}`}>
                   <button className="page-link" onClick={handlePaginaAnterior} disabled={paginaAtual === 1}>
