@@ -11,8 +11,8 @@ function SecondPage() {
   const [item, setItem] = useState(null);
   const [loading, setLoading] = useState(true); 
   const carrinhoId = localStorage.getItem("carrinhoId");
+  const userId = localStorage.getItem("userId");
 
-  // Verifica se o carrinhoId existe
   if (carrinhoId) {
       console.log("Carrinho ID:", carrinhoId);
   } else {
@@ -36,6 +36,11 @@ function SecondPage() {
   }, [id]);
 
   const addCarrinho = () => {
+    if (!carrinhoId) {
+      alert('Carrinho não encontrado. Faça login ou inicie um carrinho.');
+      return;
+    }
+
     const novoItem = {
       produto_id: item.id,
       quantidade: 1
@@ -52,13 +57,67 @@ function SecondPage() {
       if (!response.ok) throw new Error('Erro ao adicionar ao carrinho');
       return response.json();
     })
-    .then(data => {
+    .then(() => {
       alert('Item adicionado ao carrinho com sucesso');
     })
     .catch(error => {
       console.error('Erro:', error);
       alert('Erro ao adicionar item ao carrinho');
     });
+  };
+
+  const addFavoritos = () => {
+    if (!userId) {
+      alert('Usuário não autenticado.');
+      return;
+    }
+  
+    const usuarioId = parseInt(userId);
+
+    fetch(`http://127.0.0.1:8000/favoritos?usuario_id=${usuarioId}`)
+      .then((response) => {
+        if (response.status === 404) {
+          // Não existe ainda, cria novo
+          return { produtos: [] };
+        }
+        if (!response.ok) {
+          throw new Error("Erro ao buscar favoritos");
+        }
+        return response.json();
+      })
+      .then((dadosFavoritos) => {
+        const produtosExistentes = dadosFavoritos.produtos?.map(p => p.id) || [];
+
+        if (produtosExistentes.includes(item.id)) {
+          alert('Produto já está nos favoritos');
+          return;
+        }
+
+        const produtosAtualizados = [...produtosExistentes, item.id];
+
+        const payload = {
+          usuario_id: usuarioId,
+          produtos_ids: produtosAtualizados
+        };
+
+        return fetch('http://127.0.0.1:8000/favoritos', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+      })
+      .then((response) => {
+        if (!response) return;
+        if (!response.ok) throw new Error("Erro ao atualizar favoritos");
+        return response.json();
+      })
+      .then(() => {
+        alert("Produto adicionado aos favoritos");
+      })
+      .catch((error) => {
+        console.error("Erro:", error);
+        alert("Erro ao adicionar aos favoritos");
+      });
   };
 
   if (loading) {
@@ -91,6 +150,13 @@ function SecondPage() {
             <p>{item.detalhes}</p>
             <h3>Preço: {item.preco}</h3>
             <button className='addCarrinho' onClick={addCarrinho}>Adicionar ao Carrinho</button>
+            <button
+              className="addFavoritos mt-3"
+              onClick={addFavoritos}
+              style={{ display: 'block' }}
+            >
+              Adicionar aos Favoritos
+            </button>
           </div>
         </div>
       </div>

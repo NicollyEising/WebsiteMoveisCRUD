@@ -236,22 +236,36 @@ def login_usuario(data: LoginData, db: DBSession = Depends(get_db)):
 # ------------------- FAVORITOS -------------------
 
 @app.post("/favoritos", response_model=FavoritosRead)
-def criar_favoritos(data: FavoritosCreate):
-    db = Session()
-    favoritos = Favoritos(usuario_id=data.usuario_id)
-    favoritos.produtos = db.query(Produtos).filter(Produtos.id.in_(data.produtos_ids)).all()
-    db.add(favoritos)
+def criar_ou_atualizar_favoritos(data: FavoritosCreate, db: DBSession = Depends(get_db)):
+    favoritos = db.query(Favoritos).filter(Favoritos.usuario_id == data.usuario_id).first()
+    
+    produtos_novos = db.query(Produtos).filter(Produtos.id.in_(data.produtos_ids)).all()
+    if not produtos_novos:
+        raise HTTPException(status_code=404, detail="Produtos não encontrados.")
+
+    if favoritos:
+        # Evita duplicatas: adiciona novos produtos aos favoritos existentes
+        produtos_existentes_ids = {p.id for p in favoritos.produtos}
+        for p in produtos_novos:
+            if p.id not in produtos_existentes_ids:
+                favoritos.produtos.append(p)
+    else:
+        favoritos = Favoritos(
+            usuario_id=data.usuario_id,
+            produtos=produtos_novos
+        )
+        db.add(favoritos)
+
     db.commit()
     db.refresh(favoritos)
-    db.close()
     return favoritos
 
-@app.get("/favoritos", response_model=List[FavoritosRead])
-def listar_favoritos():
-    db = Session()
-    data = db.query(Favoritos).all()
-    db.close()
-    return data
+@app.get("/favoritos", response_model=FavoritosRead)
+def obter_favoritos_por_usuario(usuario_id: int, db: DBSession = Depends(get_db)):
+    favoritos = db.query(Favoritos).options(joinedload(Favoritos.produtos)).filter(Favoritos.usuario_id == usuario_id).first()
+    if not favoritos:
+        raise HTTPException(status_code=404, detail="Favoritos não encontrados para este usuário.")
+    return favoritos 
 
 @app.delete("/favoritos/{id}")
 def deletar_favoritos(id: int):
@@ -263,6 +277,15 @@ def deletar_favoritos(id: int):
     db.commit()
     db.close()
     return {"ok": True}
+
+@app.get("/favoritos/{id}", response_model=FavoritosRead)
+def obter_favorito_por_id(id: int):
+    db = Session()
+    favorito = db.query(Favoritos).get(id)
+    db.close()
+    if not favorito:
+        raise HTTPException(status_code=404, detail="Favorito não encontrado.")
+    return favorito
 
 # ------------------- CARRINHO -------------------
 

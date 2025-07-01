@@ -21,10 +21,40 @@ const Navbar = () => {
     }
   };
 
+  const handlePersonClick = () => {
+    const storedUser = localStorage.getItem('userId');
+    console.log("Raw localStorage:", storedUser);
+
+    try {
+      const parsed = JSON.parse(storedUser);
+
+      // Caso o dado seja um objeto com userId
+      if (parsed && typeof parsed === 'object' && parsed.userId) {
+        console.log("Navigating to:", `/sixPage/${parsed.userId}`);
+        navigate(`/sixPage/${parsed.userId}`);
+        return;
+      }
+
+      // Caso seja uma string ou número direto (ex: "51")
+      if (typeof parsed === 'number' || typeof parsed === 'string') {
+        console.log("Navigating to:", `/sixPage/${parsed}`);
+        navigate(`/sixPage/${parsed}`);
+        return;
+      }
+
+      console.log("Sem userId válido, indo para /fourPage");
+      navigate('/fourPage');
+
+    } catch (error) {
+      console.error("Erro ao fazer parse do localStorage:", error);
+      navigate('/fourPage');
+    }
+  };
+
   return (
     <nav className="navbar navbar-expand-lg fixed-top">
       <div className="container">
-        <Link to="/" className="page-link">Navbar</Link>
+        <Link to="/" className="title-link">Navbar</Link>
 
         <button
           className="navbar-toggler"
@@ -40,15 +70,9 @@ const Navbar = () => {
         <div className={`collapse navbar-collapse ${isNavbarOpen ? "show" : ""}`} id="navbarSupportedContent">
           <div className="d-flex mx-auto align-items-center itensPequeno">
             <ul className="navbar-nav mb-2 mb-lg-0 itensPequeno">
-              <li>
-                <a className="dropdown-item px-4" href="#">Cadeiras de Escritório</a>
-              </li>
-              <li>
-                <a className="dropdown-item px-4" href="#">Cadeiras Gamer</a>
-              </li>
-              <li>
-                <a className="dropdown-item px-4" href="#">Cadeiras Ergonômicas</a>
-              </li>
+              <li><Link to="/produtos/cadeira" className="page-link">Cadeiras de Escritório</Link></li>
+              <li><Link to="/produtos/cadeira" className="page-link">Cadeiras Gamer</Link></li>
+              <li><Link to="/produtos/cadeira" className="page-link">Cadeiras Ergonômicas</Link></li>
             </ul>
           </div>
 
@@ -76,13 +100,17 @@ const Navbar = () => {
               </form>
             </div>
 
-            <Link to="/fourPage" className="page-link">
-              <button className="bi bi-person" aria-label="Person Icon"></button>
-            </Link>
+            <button
+              className="bi bi-person"
+              aria-label="Person Icon"
+              onClick={handlePersonClick}
+            ></button>
+
             <Link to="/sevenPage" className="page-link">
               <button className="bi bi-cart2" aria-label="Cart Icon"></button>
-              </Link>
-            <a href="#" className="btnCart">
+            </Link>
+
+            <a href="/eightPage" className="btnCart">
               <button className="bi bi-heart-fill" aria-label="Favorites Icon"></button>
             </a>
           </div>

@@ -35,6 +35,8 @@ const ThirdPage = () => {
     } else {
         console.log("Carrinho ID não encontrado no localStorage.");
     }
+
+
   
     const novoItem = {
       produto_id: produto.id,
@@ -60,6 +62,67 @@ const ThirdPage = () => {
       alert('Erro ao adicionar item ao carrinho');
     });
   };
+
+
+  const addFavoritos = (produto) => {
+    const userId = localStorage.getItem('userId');
+    if (!userId) {
+      alert('Usuário não autenticado.');
+      return;
+    }
+  
+    const usuarioId = parseInt(userId);
+  
+    // Passo 1: Buscar favoritos existentes do usuário
+    fetch(`http://127.0.0.1:8000/favoritos?usuario_id=${usuarioId}`)
+      .then((response) => {
+        if (response.status === 404) {
+          // Não existe ainda, cria novo
+          return { produtos: [] };
+        }
+        if (!response.ok) {
+          throw new Error("Erro ao buscar favoritos");
+        }
+        return response.json();
+      })
+      .then((dadosFavoritos) => {
+        const produtosExistentes = dadosFavoritos.produtos?.map(p => p.id) || [];
+  
+        // Evita duplicação
+        if (produtosExistentes.includes(produto.id)) {
+          alert('Produto já está nos favoritos');
+          return;
+        }
+  
+        const produtosAtualizados = [...produtosExistentes, produto.id];
+  
+        const payload = {
+          usuario_id: usuarioId,
+          produtos_ids: produtosAtualizados
+        };
+  
+        // Passo 2: Enviar atualização para o backend
+        return fetch('http://127.0.0.1:8000/favoritos', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+      })
+      .then((response) => {
+        if (!response) return;
+        if (!response.ok) throw new Error("Erro ao atualizar favoritos");
+        return response.json();
+      })
+      .then(() => {
+        alert("Produto adicionado aos favoritos");
+      })
+      .catch((error) => {
+        console.error("Erro:", error);
+        alert("Erro ao adicionar aos favoritos");
+      });
+  };
+  
+  
   
 
   if (loading) return <div>Carregando...</div>;
@@ -167,7 +230,7 @@ const ThirdPage = () => {
               {produtosPaginaAtual.map((produto) => (
                 <li key={produto.id} className="cardLista">
                   <div className="card" style={{ width: '18rem' }}>
-                    <button className="bi bi-heart-fill heart-icon" aria-label="Favorites Icon"></button>
+                    <button className="bi bi-heart-fill heart-icon" onClick={() => addFavoritos(produto)} aria-label="Favorites Icon"></button>
                     <img
                       src={produto.img}
                       className="card-img-top"

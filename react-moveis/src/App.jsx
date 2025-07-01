@@ -11,6 +11,7 @@ import FourPage from "./fourPage";
 import FifthPage from "./fifthPage";
 import SixPage from "./sixPage";
 import SevenPage from "./sevenPage";
+import EightPage from "./eightPage";
 function HomePage() {
   return (
     <>
@@ -35,6 +36,7 @@ function App() {
       <Route path="/fifthPage" element={<FifthPage />} />
       <Route path="/sixPage/:id" element={<SixPage />} />
       <Route path="/sevenPage" element={<SevenPage />} />
+      <Route path="/eightPage" element={<EightPage />} />
     </Routes>
   )
 }

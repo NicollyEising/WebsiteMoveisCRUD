@@ -87,8 +87,12 @@ li a{
     display: flex!important;
 }
 
-.page-link{
+.title-link{
     font-size: 1.3em;
+}
+
+.page-link{
+    font-size: 1em;
 }
 
 @media screen and (max-width: 720px) {

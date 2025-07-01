@@ -54,8 +54,15 @@ function SecondPage() {
               <div className="card mb-3" style={{ borderRadius: '.5rem' }}>
                 <div className="row g-0">
                 <div className="d-flex justify-content-end pe-3 pt-3">
-                    <Link to="/fifthPage" onClick={() => localStorage.removeItem('token')}><i className="bi bi-box-arrow-in-right"></i></Link>
-                  </div>
+                <Link
+  to="/fifthPage"
+  onClick={() => {
+    localStorage.removeItem('token');
+    localStorage.removeItem('userId');
+  }}
+>
+  <i className="bi bi-box-arrow-in-right"></i>
+</Link>                  </div>
                   <div className="col-md-4 gradient-custom text-center text-white"
                     style={{ borderTopLeftRadius: '.5rem', borderBottomLeftRadius: '.5rem' }}>
                     <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT1rTLeQraa9s-Rkj2_KMPOzh30CwK1G2D85A&s"

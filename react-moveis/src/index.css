@@ -40,3 +40,9 @@ body{
 .footer {
   margin-top: 20px; /* Ajuste o valor conforme necessário */
 }
+
+.bottom{
+  display: flex;
+  flex-direction: column;
+  justify-content: center; /* Centraliza verticalmente */ 
+}
